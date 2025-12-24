@@ -2,9 +2,7 @@ name: Playwright Tests
 
 on:
   push:
-    branches: [main, master, develop]
   pull_request:
-    branches: [main, master, develop]
   workflow_dispatch:
 
 jobs:
@@ -36,7 +34,7 @@ jobs:
 
           TEST_USER: ${{ secrets.TEST_USER }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          
+
           CI: true
         run: npx playwright test ./tests/e2e
 
