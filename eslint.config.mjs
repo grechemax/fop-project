@@ -8,8 +8,8 @@ export default tsEslint.config({
     languageOptions: {
         parserOptions: {
             project: true,
-            tsconfigRootDir: process.cwd(),
-        },
+            tsconfigRootDir: process.cwd()
+        }
     },
     plugins: {
         '@stylistic': stylistic,
@@ -57,6 +57,6 @@ export default tsEslint.config({
             {
                 case: 'kebabCase'
             }
-        ],
+        ]
     }
 });
