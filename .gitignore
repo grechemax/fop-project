@@ -1,4 +1,13 @@
 node_modules/
 .vscode/
 .idea/
+.env
 build/
+storageStates/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
