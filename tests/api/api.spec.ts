@@ -6,7 +6,7 @@ dotenv.config();
 
 test.describe('API Tests', () => {
     const baseURL = process.env.API_BASE_URL_V2!;
-    const authURL = process.env.API_AUTH_URL!;
+    const authURL = process.env.API_BASE_URL!;
     const username = process.env.TEST_USER!;
     const password = process.env.TEST_PASSWORD!;
 

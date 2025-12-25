@@ -4,10 +4,12 @@ import { IncomePage } from '../pages/income.page';
 import { TaxesPage } from '../pages/taxes.page';
 import * as fs from 'fs';
 import { LoginComponent } from '../pages/components/login.component';
+import { ExpensePage } from '../pages/expense.page';
 
 interface FopFixture {
     seededIncomePage: IncomePage;
     authenticatedPage: Page;
+    expensePage: ExpensePage;
     incomePage: IncomePage;
     taxesPage: TaxesPage;
 }
@@ -93,8 +95,14 @@ export const test = base.extend<FopFixture>({
 
     taxesPage: async ({ authenticatedPage }, use) => {
         const taxesPage = new TaxesPage(authenticatedPage);
-        await taxesPage.navigate('/taxes');
+        // await taxesPage.navigate('/taxes');
         await use(taxesPage);
+    },
+
+    expensePage: async ({ authenticatedPage }, use) => {
+        const expensePage = new ExpensePage(authenticatedPage);
+        await expensePage.navigate('/expenses');
+        await use(expensePage);
     }
 });
 

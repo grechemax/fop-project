@@ -1,27 +1,27 @@
 import { BasePage } from './base-page';
 
-export class IncomePage extends BasePage {
-    public readonly incomeModalTitle = this.page.locator('.modal-title');
-    public readonly addIncomeButton = this.page.locator('.add-button');
-    public readonly incomeAmountInput = this.page.locator('#amount');
+export class ExpensePage extends BasePage {
+    public readonly expenseModalTitle = this.page.locator('.modal-title');
+    public readonly addExpenseButton = this.page.locator('.add-button');
+    public readonly expenseAmountInput = this.page.locator('#amount');
     public readonly currency = this.page.locator('#currency');
     public readonly comment = this.page.locator('#comment');
     public readonly submitButton = this.page.locator('button[type="submit"]');
-    public readonly incomeTableContainer = this.page.locator('.income-table-container');
+    public readonly expenseTableContainer = this.page.locator('.expenses-table-container');
     public readonly totalAmount = this.page.locator('.total-amount');
     public readonly deleteButton = this.page.locator('button.action-btn.delete-btn');
 
-    public async clickAddIncome(): Promise<void> {
-        await this.addIncomeButton.click();
+    public async clickAddExpense(): Promise<void> {
+        await this.addExpenseButton.click();
     }
 
-    public async getAddIncomeModalTitle(): Promise<string> {
-        await this.incomeModalTitle.waitFor({ state: 'visible', timeout: 10000 });
-        return (await this.incomeModalTitle.textContent()) || '';
+    public async getAddExpenseModalTitle(): Promise<string> {
+        await this.expenseModalTitle.waitFor({ state: 'visible', timeout: 10000 });
+        return (await this.expenseModalTitle.textContent()) || '';
     }
 
-    public async enterIncome(amount: string): Promise<void> {
-        await this.incomeAmountInput.fill(amount);
+    public async enterExpense(amount: string): Promise<void> {
+        await this.expenseAmountInput.fill(amount);
     }
 
     public async selectCurrency(currency: string): Promise<void> {
@@ -32,43 +32,43 @@ export class IncomePage extends BasePage {
         await this.comment.fill(comment);
     }
 
-    public async submitIncomeForm(): Promise<void> {
+    public async submitExpenseForm(): Promise<void> {
         await this.submitButton.click();
     }
 
-    public async addIncome(amount: string, currency: string, comment: string): Promise<void> {
-        await this.clickAddIncome();
+    public async addExpense(amount: string, currency: string, comment: string): Promise<void> {
+        await this.clickAddExpense();
         await this.waitForModalAppeared();
-        await this.enterIncome(amount);
+        await this.enterExpense(amount);
         await this.selectCurrency(currency);
         await this.fillComment(comment);
-        await this.submitIncomeForm();
+        await this.submitExpenseForm();
         await this.waitForModalDisappeared();
     }
 
     public async waitForModalAppeared(): Promise<void> {
-        await this.assertElementVisible(this.incomeModalTitle);
-    }
-    public async waitForModalDisappeared(): Promise<void> {
-        await this.assertElementNotVisible(this.incomeModalTitle);
+        await this.assertElementVisible(this.expenseModalTitle);
     }
 
-    public async getTotalIncomeText(): Promise<string> {
+    public async waitForModalDisappeared(): Promise<void> {
+        await this.assertElementNotVisible(this.expenseModalTitle);
+    }
+
+    public async getTotalExpenseText(): Promise<string> {
         await this.totalAmount.waitFor({ state: 'visible', timeout: 5000 });
         return (await this.totalAmount.textContent()) || '';
     }
 
-    public async assertIncomeTableVisible(): Promise<void> {
-        await this.assertElementVisible(this.incomeTableContainer);
+    public async assertExpenseTableVisible(): Promise<void> {
+        await this.assertElementVisible(this.expenseTableContainer);
     }
 
-    public async assertIncomeTableNotVisible(): Promise<void> {
-        await this.assertElementNotVisible(this.incomeTableContainer);
+    public async assertExpenseTableNotVisible(): Promise<void> {
+        await this.assertElementNotVisible(this.expenseTableContainer);
     }
 
-    public async deleteIncomeByComment(commentText: string): Promise<void> {
-        const incomeRow = this.page.locator(`//tr[./td[contains(@class, 'comment-cell') and contains(., '${commentText}')]]`);
-
+    public async deleteExpenseByComment(commentText: string): Promise<void> {
+        const expenseRow = this.page.locator(`//tr[./td[contains(@class, 'comment-cell') and contains(., '${commentText}')]]`);
         // Set up dialog handler before clicking
         this.page.once('dialog', async (dialog) => {
             if (dialog.type() === 'confirm') {
@@ -77,16 +77,15 @@ export class IncomePage extends BasePage {
             }
         });
 
-        await incomeRow.locator(this.deleteButton).click();
+        await expenseRow.locator(this.deleteButton).click();
 
         // Wait for the record to be removed from the DOM
         await this.page.waitForTimeout(500);
     }
 
-    public async deleteAllVisibleIncomes(): Promise<void> {
-
+    public async deleteAllVisibleExpenses(): Promise<void> {
         // Check if table exists
-        const tableExists = await this.incomeTableContainer.isVisible().catch(() => false);
+        const tableExists = await this.expenseTableContainer.isVisible().catch(() => false);
         if (!tableExists) {
             return;
         }

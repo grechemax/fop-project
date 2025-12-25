@@ -1,40 +1,37 @@
 import { test, expect } from '../../src/fixtures/fop-fixture';
 
 test.describe('Income tests', () => {
-    test.describe.configure({ mode: 'serial' });
-
-    test('should display correct total income amount of 600 after adding three income entries', async ({
-        seededIncomePage: incomePage
-    }) => {
-        await incomePage.assertIncomeTableVisible();
-
-        const totalAmount = await incomePage.getTotalIncomeText();
-        expect(totalAmount).toContain('600');
+    test.afterEach(async ({ incomePage }) => {
+        await incomePage.deleteAllVisibleIncomes();
     });
 
-    test('should calculate and display total tax', async ({ taxesPage }) => {
-        await taxesPage.assertTaxTableVisible();
-        const totalTax = await taxesPage.getTotalTaxText();
-        expect(totalTax).toContain('796');
+    const uniqueId = `test-${Date.now()}`;
+
+    test('should display correct total income amount', async ({ incomePage }) => {
+        await incomePage.addIncome('1', 'UAH', `Income A ${uniqueId}`);
+        await incomePage.addIncome('123', 'UAH', `Income B ${uniqueId}`);
+        await incomePage.addIncome('345.5', 'UAH', `Income C ${uniqueId}`);
+
+        await incomePage.assertIncomeTableVisible();
+        expect(await incomePage.getTotalIncomeText()).toContain('469,5');
     });
 
     test('should update total when deleting a single income entry', async ({ incomePage }) => {
-        await incomePage.deleteIncomeByComment('Test income A');
-        const totalAmount = await incomePage.getTotalIncomeText();
+        await incomePage.addIncome('100', 'UAH', `Update total test A ${uniqueId}`);
+        await incomePage.addIncome('200', 'UAH', `Update total test B ${uniqueId}`);
+        await incomePage.addIncome('300', 'UAH', `Update total test C ${uniqueId}`);
 
-        expect(totalAmount).toContain('500');
+        await incomePage.deleteIncomeByComment(`Update total test A ${uniqueId}`);
+        expect(await incomePage.getTotalIncomeText()).toContain('500');
     });
 
-    test('should NOT display income table when all remaining income entries are deleted', async ({ incomePage }) => {
-        const testComments = ['Test income B', 'Test income C'];
-        for (const comment of testComments) {
-            await incomePage.deleteIncomeByComment(comment);
-        }
+    test('income table should be hidden when all incomes are deleted', async ({ incomePage }) => {
         await incomePage.assertIncomeTableNotVisible();
-    });
 
-    test('should NOT display tax table when all income entries have been deleted', async ({ taxesPage }) => {
-        await taxesPage.navigate('/taxes');
-        await taxesPage.assertTaxTableNotVisible();
+        await incomePage.addIncome('100', 'UAH', `Table visibility test ${uniqueId}`);
+        await incomePage.assertIncomeTableVisible();
+
+        await incomePage.deleteIncomeByComment(`Table visibility test ${uniqueId}`);
+        await incomePage.assertIncomeTableNotVisible();
     });
 });

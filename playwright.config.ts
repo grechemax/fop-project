@@ -10,7 +10,7 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
     workers: 1, // Run tests serially
-    reporter: [['html', { open: 'never' }], ['list']],
+    reporter: process.env.CI ? 'blob' : [['html', { open: 'never' }], ['list']],
     /* Shared settings for all the projects below. */
     use: {
         baseURL: process.env.BASE_URL,
@@ -22,7 +22,12 @@ export default defineConfig({
     projects: [
         {
             name: 'chromium',
+            testMatch: /.*\/e2e\/.*\.test\.ts/,
             use: { ...devices['Desktop Chrome'] }
+        },
+        {
+            name: 'api',
+            testMatch: /.*\/api\/.*\.spec\.ts/
         }
     ]
 });
