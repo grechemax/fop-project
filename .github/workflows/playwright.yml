@@ -5,6 +5,15 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  BASE_URL: ${{ vars.BASE_URL }}
+  API_BASE_URL: ${{ vars.API_BASE_URL }}
+  API_BASE_URL_V2: ${{ vars.API_BASE_URL_V2 }}
+  API_AUTH_URL: ${{ vars.API_AUTH_URL }}
+  TEST_USER: ${{ secrets.TEST_USER }}
+  TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+  CI: true
+
 jobs:
   e2e-tests:
     name: E2E Tests
@@ -28,14 +37,6 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        env:
-          BASE_URL: ${{ vars.BASE_URL }}
-          API_BASE_URL: ${{ vars.API_BASE_URL }}
-
-          TEST_USER: ${{ secrets.TEST_USER }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-
-          CI: true
         run: npx playwright test ./tests/e2e
 
       - name: Upload test results
@@ -72,19 +73,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Run API tests
-        env:
-          BASE_URL: ${{ vars.BASE_URL }}
-          API_BASE_URL: ${{ vars.API_BASE_URL }}
-          API_BASE_URL_V2: ${{ vars.API_BASE_URL_V2 }}
-
-          TEST_USER: ${{ secrets.TEST_USER }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-          
-          CI: true
         run: npm run test:api
 
       - name: Upload test results
