@@ -1,10 +1,6 @@
-// import { expect } from '@playwright/test';
 import { BasePage } from './base-page';
 
 export class IncomePage extends BasePage {
-    public readonly loginModal = this.page.locator('.modal');
-    public readonly modalForm = this.page.locator('.login-modal-form');
-    public readonly pageHeading = this.page.getByRole('heading', { name: /Податки|Taxes/i });
     public readonly incomeModalTitle = this.page.locator('.modal-title');
     public readonly addIncomeButton = this.page.locator('.add-button');
     public readonly incomeAmountInput = this.page.locator('#amount');
@@ -38,6 +34,16 @@ export class IncomePage extends BasePage {
 
     public async submitIncomeForm(): Promise<void> {
         await this.submitButton.click();
+    }
+
+    public async addIncome(amount: string, currency: string, comment: string): Promise<void> {
+        await this.clickAddIncome();
+        await this.waitForModalAppeared();
+        await this.enterIncome(amount);
+        await this.selectCurrency(currency);
+        await this.fillComment(comment);
+        await this.submitIncomeForm();
+        await this.waitForModalDisappeared();
     }
 
     public async waitForModalAppeared(): Promise<void> {
@@ -75,5 +81,38 @@ export class IncomePage extends BasePage {
 
         // Wait for the record to be removed from the DOM
         await this.page.waitForTimeout(500);
+    }
+
+    public async deleteAllVisibleIncomes(): Promise<void> {
+
+        // Check if table exists
+        const tableExists = await this.incomeTableContainer.isVisible().catch(() => false);
+        if (!tableExists) {
+            return;
+        }
+
+        // Get all comment cells to know what to delete
+        const commentCells = this.page.locator('.comment-cell');
+        const count = await commentCells.count();
+
+        if (count === 0) {
+            return;
+        }
+
+        // Delete each one by clicking first delete button
+        for (let i = 0; i < count; i++) {
+            // Set up dialog handler before clicking
+            this.page.once('dialog', async (dialog) => {
+                if (dialog.type() === 'confirm') {
+                    await dialog.accept();
+                }
+            });
+
+            const firstDeleteBtn = this.deleteButton.first();
+            if (await firstDeleteBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+                await firstDeleteBtn.click();
+                await this.page.waitForTimeout(500);
+            }
+        }
     }
 }
