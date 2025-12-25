@@ -84,7 +84,6 @@ export class IncomePage extends BasePage {
     }
 
     public async deleteAllVisibleIncomes(): Promise<void> {
-
         // Check if table exists
         const tableExists = await this.incomeTableContainer.isVisible().catch(() => false);
         if (!tableExists) {

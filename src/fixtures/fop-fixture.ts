@@ -63,11 +63,6 @@ export const test = base.extend<FopFixture>({
         await incomePage.navigate('/incomes');
         await incomePage.waitForLoad();
 
-        // Delete any existing test incomes to ensure a clean state
-        // if (await incomePage.incomeTableIsVisible()) {
-        //     await incomePage.deleteAllIncomeRecords();
-        // }
-
         const testIncomes = [
             { amount: '100', currency: 'UAH', comment: 'Test income A' },
             { amount: '200', currency: 'UAH', comment: 'Test income B' },
@@ -95,7 +90,6 @@ export const test = base.extend<FopFixture>({
 
     taxesPage: async ({ authenticatedPage }, use) => {
         const taxesPage = new TaxesPage(authenticatedPage);
-        // await taxesPage.navigate('/taxes');
         await use(taxesPage);
     },
 

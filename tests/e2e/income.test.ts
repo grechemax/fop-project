@@ -4,7 +4,6 @@ test.describe('Income tests', () => {
     test.afterEach(async ({ incomePage }) => {
         await incomePage.deleteAllVisibleIncomes();
     });
-
     const uniqueId = `test-${Date.now()}`;
 
     test('should display correct total income amount', async ({ incomePage }) => {

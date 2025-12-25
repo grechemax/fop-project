@@ -15,7 +15,6 @@ test.describe('Expense tests', () => {
 
     const uniqueId = `test-${Date.now()}`;
 
-
     test('should display correct total expense amount', async () => {
         await expensePage.addExpense('100', 'UAH', `Expense A ${uniqueId}`);
         await expensePage.addExpense('200', 'UAH', `Expense B ${uniqueId}`);

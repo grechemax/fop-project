@@ -5,7 +5,7 @@ dotenv.config();
 
 export default defineConfig({
     testDir: './tests',
-    fullyParallel: false, // Disable parallel execution to control test order
+    fullyParallel: false,
     /* Fail the build on CI if you accidentally left test.only in the source code. */
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
@@ -14,7 +14,7 @@ export default defineConfig({
     /* Shared settings for all the projects below. */
     use: {
         baseURL: process.env.BASE_URL,
-        headless: !!process.env.CI,
+        headless: true,
         trace: 'on-first-retry',
         extraHTTPHeaders: { Accept: 'application/json' }
     },
