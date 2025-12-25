@@ -95,17 +95,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download E2E blob report
+      - name: Download blob reports
         uses: actions/download-artifact@v4
         with:
-          name: e2e-blob-report
-          path: all-blob-reports/e2e
-
-      - name: Download API blob report
-        uses: actions/download-artifact@v4
-        with:
-          name: api-blob-report
-          path: all-blob-reports/api
+          pattern: '*-blob-report'
+          path: all-blob-reports
+          merge-multiple: true
 
       - name: Merge reports
         run: npx playwright merge-reports --reporter html ./all-blob-reports
