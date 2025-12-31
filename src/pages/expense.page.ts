@@ -69,7 +69,7 @@ export class ExpensePage extends BasePage {
 
     public async deleteExpenseByComment(commentText: string): Promise<void> {
         const expenseRow = this.page.locator(`//tr[./td[contains(@class, 'comment-cell') and contains(., '${commentText}')]]`);
-        // Set up dialog handler before clicking
+
         this.page.once('dialog', async (dialog) => {
             if (dialog.type() === 'confirm') {
                 await dialog.accept();
@@ -79,12 +79,11 @@ export class ExpensePage extends BasePage {
 
         await expenseRow.locator(this.deleteButton).click();
 
-        // Wait for the record to be removed from the DOM
         await this.page.waitForTimeout(500);
     }
 
     public async deleteAllVisibleExpenses(): Promise<void> {
-        // Check if table exists
+
         const tableExists = await this.expenseTableContainer.isVisible().catch(() => false);
         if (!tableExists) {
             return;

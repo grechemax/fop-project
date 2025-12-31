@@ -58,30 +58,6 @@ export const test = base.extend<FopFixture>({
         await context.close();
     },
 
-    seededIncomePage: async ({ authenticatedPage }, use) => {
-        const incomePage = new IncomePage(authenticatedPage);
-        await incomePage.navigate('/incomes');
-        await incomePage.waitForLoad();
-
-        const testIncomes = [
-            { amount: '100', currency: 'UAH', comment: 'Test income A' },
-            { amount: '200', currency: 'UAH', comment: 'Test income B' },
-            { amount: '300', currency: 'UAH', comment: 'Test income C' }
-        ];
-
-        for (const income of testIncomes) {
-            await incomePage.clickAddIncome();
-            await incomePage.waitForModalAppeared();
-            await incomePage.enterIncome(income.amount);
-            await incomePage.selectCurrency(income.currency);
-            await incomePage.fillComment(income.comment);
-            await incomePage.submitIncomeForm();
-            await incomePage.waitForModalDisappeared();
-        }
-
-        await use(incomePage);
-    },
-
     incomePage: async ({ authenticatedPage }, use) => {
         const incomePage = new IncomePage(authenticatedPage);
         await incomePage.navigate('/incomes');

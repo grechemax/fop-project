@@ -69,7 +69,6 @@ export class IncomePage extends BasePage {
     public async deleteIncomeByComment(commentText: string): Promise<void> {
         const incomeRow = this.page.locator(`//tr[./td[contains(@class, 'comment-cell') and contains(., '${commentText}')]]`);
 
-        // Set up dialog handler before clicking
         this.page.once('dialog', async (dialog) => {
             if (dialog.type() === 'confirm') {
                 await dialog.accept();
@@ -79,18 +78,16 @@ export class IncomePage extends BasePage {
 
         await incomeRow.locator(this.deleteButton).click();
 
-        // Wait for the record to be removed from the DOM
         await this.page.waitForTimeout(500);
     }
 
     public async deleteAllVisibleIncomes(): Promise<void> {
-        // Check if table exists
+
         const tableExists = await this.incomeTableContainer.isVisible().catch(() => false);
         if (!tableExists) {
             return;
         }
 
-        // Get all comment cells to know what to delete
         const commentCells = this.page.locator('.comment-cell');
         const count = await commentCells.count();
 
@@ -98,9 +95,8 @@ export class IncomePage extends BasePage {
             return;
         }
 
-        // Delete each one by clicking first delete button
         for (let i = 0; i < count; i++) {
-            // Set up dialog handler before clicking
+
             this.page.once('dialog', async (dialog) => {
                 if (dialog.type() === 'confirm') {
                     await dialog.accept();
