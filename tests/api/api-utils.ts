@@ -1,11 +1,5 @@
 import { APIRequestContext, expect } from '@playwright/test';
 
-export interface AuthResponse {
-    token: string;
-    expiration: string;
-    refreshToken: string;
-}
-
 export async function login(request: APIRequestContext, authURL: string, username: string, password: string): Promise<void> {
     const loginUrl = `${authURL}/react/authenticate/login`;
 
