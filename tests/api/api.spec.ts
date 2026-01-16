@@ -7,8 +7,8 @@ dotenv.config();
 test.describe('API Tests', () => {
     const baseURL = process.env.API_BASE_URL_V2!;
     const authURL = process.env.API_BASE_URL!;
-    const username = process.env.TEST_USER!;
-    const password = process.env.TEST_PASSWORD!;
+    const username = process.env.API_TEST_USER!;
+    const password = process.env.API_TEST_PASSWORD!;
 
     test.beforeEach(async ({ request }) => {
         await login(request, authURL, username, password);
