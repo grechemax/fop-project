@@ -82,7 +82,6 @@ export class IncomePage extends BasePage {
     }
 
     public async deleteAllVisibleIncomes(): Promise<void> {
-
         const tableExists = await this.incomeTableContainer.isVisible().catch(() => false);
         if (!tableExists) {
             return;
@@ -96,7 +95,6 @@ export class IncomePage extends BasePage {
         }
 
         for (let i = 0; i < count; i++) {
-
             this.page.once('dialog', async (dialog) => {
                 if (dialog.type() === 'confirm') {
                     await dialog.accept();

@@ -100,7 +100,6 @@ npx playwright test --project=chromium
 npx playwright test --debug
 ```
 
-
 ### Step 6: View reports
 
 After test execution, open the HTML report:

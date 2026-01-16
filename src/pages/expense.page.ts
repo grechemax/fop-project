@@ -83,7 +83,6 @@ export class ExpensePage extends BasePage {
     }
 
     public async deleteAllVisibleExpenses(): Promise<void> {
-
         const tableExists = await this.expenseTableContainer.isVisible().catch(() => false);
         if (!tableExists) {
             return;
