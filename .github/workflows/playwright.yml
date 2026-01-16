@@ -12,6 +12,8 @@ env:
     API_AUTH_URL: ${{ vars.API_AUTH_URL }}
     TEST_USER: ${{ secrets.TEST_USER }}
     TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+    API_TEST_USER: ${{ secrets.API_TEST_USER }}
+    API_TEST_PASSWORD: ${{ secrets.API_TEST_PASSWORD }}
     CI: true
 
 jobs:
